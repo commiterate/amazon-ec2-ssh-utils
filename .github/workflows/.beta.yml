@@ -1,0 +1,35 @@
+#
+# GitHub Actions workflow configuration.
+#
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+#
+
+name: Beta
+on:
+  workflow_call:
+defaults:
+  run:
+    shell: nix develop --command bash -e {0}
+jobs:
+  beta:
+    name: Beta
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infrastructure
+    steps:
+      # Checkout.
+      - uses: actions/checkout@v6
+      # Install Nix + Magic Nix Cache.
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          summarize: false
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      # Main.
+      - run: |
+          just release
+      - uses: aws-actions/configure-aws-credentials@v4
+      - run: bun run cdk deploy amazon-ec2-ssh-utils.beta.us-west-2 --require-approval never
