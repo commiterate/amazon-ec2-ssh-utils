@@ -1,0 +1,10 @@
+{
+	"app": "bun run src/main.ts",
+	"context": {
+		"@aws-cdk/core:checkSecretUsage": true,
+		"@aws-cdk/core:enableAdditionalMetadataCollection": false,
+		"@aws-cdk/core:enablePartitionLiterals": true,
+		"cli-telemetry": false
+	},
+	"output": "build/cdk.out"
+}

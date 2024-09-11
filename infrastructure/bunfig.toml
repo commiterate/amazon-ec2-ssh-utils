@@ -1,0 +1,8 @@
+#
+# Bun configuration.
+#
+# https://bun.com/docs/runtime/bunfig
+#
+
+[install]
+minimumReleaseAge = 604800
