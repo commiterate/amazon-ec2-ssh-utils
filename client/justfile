@@ -1,0 +1,60 @@
+#
+# just configuration.
+#
+# https://just.systems/man/en
+#
+
+# List recipes.
+help:
+	just --list
+
+# Remove build artifacts.
+clean:
+	# Remove build artifacts.
+	rm -rf build
+
+# Create mocks.
+mock:
+	# Remove build artifacts.
+	find -path "./internal/interfaces/**/*_mock.go" -type f -delete
+	# Create mocks.
+	mockery
+	if [[ -n "${CI:-}" ]]; then git diff --exit-code; fi
+
+# Run static analysis (formatters, linters).
+analyze:
+	# Format Go files.
+	if [[ -z "${CI:-}" ]]; then go mod tidy; else go mod tidy --diff; fi
+	if [[ -z "${CI:-}" ]]; then go fmt ./...; else go fmt ./... && git diff --exit-code; fi
+	# Lint Go files.
+	if [[ -z "${CI:-}" ]]; then golangci-lint run --fix; else golangci-lint run; fi
+
+# Run tests.
+test:
+	# Remove build artifacts.
+	rm -rf build/coverage
+	# Run unit tests.
+	mkdir --parents build/coverage
+	go test -vet off -coverprofile build/coverage/coverage.out ./internal/implementations/...
+	# Create coverage reports.
+	go tool cover -html build/coverage/coverage.out -o build/coverage/coverage.html
+
+# Build binaries.
+build:
+	# Remove build artifacts.
+	rm -rf build/{aarch64-linux,aarch64-darwin,aarch64-windows,x86-64-linux,x86-64-darwin,x86-64-windows}
+	# Build AArch64 Linux binaries.
+	CGO_ENABLED=0 GOARCH=arm64 GOOS=linux go build -o build/aarch64-linux/bin/ ./cmd/...
+	# Build AArch64 macOS binaries.
+	CGO_ENABLED=0 GOARCH=arm64 GOOS=darwin go build -o build/aarch64-darwin/bin/ ./cmd/...
+	# Build AArch64 Windows binaries.
+	CGO_ENABLED=0 GOARCH=arm64 GOOS=windows go build -o build/aarch64-windows/bin/ ./cmd/...
+	# Build x86-64 Linux binaries.
+	CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o build/x86-64-linux/bin/ ./cmd/...
+	# Build x86-64 macOS binaries.
+	CGO_ENABLED=0 GOARCH=amd64 GOOS=darwin go build -o build/x86-64-darwin/bin/ ./cmd/...
+	# Build x86-64 Windows binaries.
+	CGO_ENABLED=0 GOARCH=amd64 GOOS=windows go build -o build/x86-64-windows/bin/ ./cmd/...
+
+# Release build.
+release: clean mock analyze test build

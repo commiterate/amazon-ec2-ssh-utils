@@ -1,0 +1,44 @@
+#
+# just configuration.
+#
+# https://just.systems/man/en
+#
+
+binary-name := "amazon-ec2-ssh-utils-tests"
+
+# List recipes.
+help:
+	just --list
+
+# Remove build artifacts.
+clean:
+	# Remove build artifacts.
+	rm -rf build
+
+# Run static analysis (formatters, linters).
+analyze:
+	# Format Go files.
+	if [[ -z "${CI:-}" ]]; then go mod tidy; else go mod tidy --diff; fi
+	if [[ -z "${CI:-}" ]]; then go fmt ./...; else go fmt ./... && git diff --exit-code; fi
+	# Lint Go files.
+	if [[ -z "${CI:-}" ]]; then golangci-lint run --fix; else golangci-lint run; fi
+
+# Build binaries.
+build:
+	# Remove build artifacts.
+	rm -rf build/{aarch64-linux,aarch64-darwin,aarch64-windows,x86-64-linux,x86-64-darwin,x86-64-windows}
+	# Build AArch64 Linux binaries.
+	CGO_ENABLED=0 GOARCH=arm64 GOOS=linux go test -c -o build/aarch64-linux/bin/{{binary-name}} ./internal/...
+	# Build AArch64 macOS binaries.
+	CGO_ENABLED=0 GOARCH=arm64 GOOS=darwin go test -c -o build/aarch64-darwin/bin/{{binary-name}} ./internal/...
+	# Build AArch64 Windows binaries.
+	CGO_ENABLED=0 GOARCH=arm64 GOOS=windows go test -c -o build/aarch64-windows/bin/{{binary-name}} ./internal/...
+	# Build x86-64 Linux binaries.
+	CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go test -c -o build/x86-64-linux/bin/{{binary-name}} ./internal/...
+	# Build x86-64 macOS binaries.
+	CGO_ENABLED=0 GOARCH=amd64 GOOS=darwin go test -c -o build/x86-64-darwin/bin/{{binary-name}} ./internal/...
+	# Build x86-64 Windows binaries.
+	CGO_ENABLED=0 GOARCH=amd64 GOOS=windows go test -c -o build/x86-64-windows/bin/{{binary-name}} ./internal/...
+
+# Release build.
+release: clean analyze build

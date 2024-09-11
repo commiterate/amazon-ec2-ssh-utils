@@ -1,0 +1,51 @@
+#
+# GitHub Actions workflow configuration.
+#
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+#
+
+name: Publish
+on:
+  workflow_call:
+defaults:
+  run:
+    shell: nix develop --command bash -e {0}
+jobs:
+  get-version:
+    name: Get Version
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - name: get-version
+        # Wrap `nix eval` in `echo` to add a trailing newline.
+        run: echo $(nix eval --raw .#amazon-ec2-ssh-utils.version) | cat <(echo -n 'version=') - >> $GITHUB_OUTPUT
+  github-release:
+    name: GitHub Release
+    needs:
+      - get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - run: gh release --repo ${{ github.repository }} view ${{ needs.get-version.outputs.version }} || gh release --repo ${{ github.repository }} create ${{ needs.get-version.outputs.version }} --generate-notes --latest --target ${{ github.sha }}
+  homebrew:
+    name: Homebrew
+    needs:
+      - get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      # TODO: Create a Homebrew formula and publish to the aws/homebrew-aws repository.
+  winget:
+    name: WinGet
+    needs:
+      - get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      # TODO: Create a WinGet manifest with Komac and publish to the microsoft/winget-pkgs repository.

@@ -1,0 +1,22 @@
+{
+	"name": "@amazon-ec2-ssh-utils/infrastructure",
+	"private": true,
+	"type": "module",
+	"dependencies": {
+		"aws-cdk-lib": "^2.225.0",
+		"confbox": "^0.1.8"
+	},
+	"devDependencies": {
+		"@aws-sdk/client-ssm": "^3.932.0",
+		"@eslint/compat": "^1.4.1",
+		"@stylistic/eslint-plugin": "^4.4.1",
+		"@tsconfig/bun": "^1.0.10",
+		"@tsconfig/strictest": "^2.0.8",
+		"@types/node": "^22.19.1",
+		"aws-cdk": "^2.1032.0",
+		"eslint": "^9.39.1",
+		"eslint-plugin-import": "^2.32.0",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.47.0"
+	}
+}

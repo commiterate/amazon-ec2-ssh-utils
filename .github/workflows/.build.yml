@@ -1,0 +1,85 @@
+#
+# GitHub Actions workflow configuration.
+#
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+#
+
+name: Build
+on:
+  workflow_call:
+defaults:
+  run:
+    # We're cross-compiling Windows for convenience, so this is safe.
+    shell: nix develop --command bash -e {0}
+jobs:
+  client:
+    name: Client
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - run: just release
+  client-nix:
+    name: Client (Nix)
+    strategy:
+      matrix:
+        runs-on:
+          # aarch64-darwin
+          - macos-15
+          # aarch64-linux
+          - ubuntu-latest-arm
+          # x86_64-darwin
+          - macos-13
+          # x86_64-linux
+          - ubuntu-latest
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - run: nix build .#amazon-ec2-ssh-utils
+  infrastructure:
+    name: Infrastructure
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infrastructure
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - run: just release
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tests
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - run: just release
+  tests-nix:
+    name: Tests (Nix)
+    strategy:
+      matrix:
+        runs-on:
+          # aarch64-darwin
+          - macos-15
+          # aarch64-linux
+          - ubuntu-latest-arm
+          # x86_64-darwin
+          - macos-13
+          # x86_64-linux
+          - ubuntu-latest
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - run: nix build .#amazon-ec2-ssh-utils-tests
+  # TODO: Create + check a Homebrew formula derivation.
+  #
+  # 1. Create a Homebrew formula derivation.
+  # 2. Create a nix-darwin configuration that installs Homebrew with nix-homebrew (https://github.com/zhaofengli/nix-homebrew) and installs the Homebrew formula derivation.
+  # 3. Run `amazon-ec2-ssh-utils --help` to validate the install.

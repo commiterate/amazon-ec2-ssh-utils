@@ -1,0 +1,25 @@
+#
+# GitHub Actions workflow configuration.
+#
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+#
+
+name: Beta
+on:
+  workflow_call:
+defaults:
+  run:
+    shell: nix develop --command bash -e {0}
+jobs:
+  beta:
+    name: Beta
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infrastructure
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: actions/checkout@v4
+      - run: just release
+      - uses: aws-actions/configure-aws-credentials@v4
+      - run: bun run cdk deploy amazon-ec2-ssh-utils.beta.us-west-2 --require-approval never

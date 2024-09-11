@@ -1,0 +1,12 @@
+/*
+ * TypeScript configuration.
+ *
+ * https://www.typescriptlang.org/tsconfig
+ */
+{
+	"extends": ["@tsconfig/bun/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
+	"compilerOptions": {
+		"noEmit": true
+	},
+	"include": ["src"]
+}

@@ -1,0 +1,43 @@
+#
+# just configuration.
+#
+# https://just.systems/man/en
+#
+
+# List recipes.
+help:
+	just --list
+
+# Remove build artifacts.
+clean:
+	# Remove build artifacts.
+	rm -rf build
+
+# Prepare environment.
+prepare:
+	# Install Node.js dependencies.
+	bun install
+
+# Run static analysis (format, lint, type check).
+analyze: prepare
+	# Format + lint JavaScript files.
+	if [[ -z "${CI:-}" ]]; then bun run eslint --fix; else bun run eslint; fi
+	# Type check JavaScript files.
+	bun run tsc
+
+# Create the CDK context.
+context: prepare
+	# Remove the CDK context.
+	rm cdk.context.json
+	# Create the CDK context.
+	bun run src/scripts/context.ts
+
+# Build templates.
+build: prepare
+	# Remove build artifacts.
+	rm -rf build/cdk.out
+	# Build templates.
+	bun run cdk synthesize --quiet
+
+# Release build.
+release: clean analyze build

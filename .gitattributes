@@ -1,0 +1,8 @@
+# Lock files.
+*.lock linguist-generated
+cdk.context.json linguist-generated
+go.sum linguist-generated
+go.work.sum linguist-generated
+
+# Mocks.
+*_mock.go linguist-generated
