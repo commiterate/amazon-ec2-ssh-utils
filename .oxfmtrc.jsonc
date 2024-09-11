@@ -1,0 +1,11 @@
+/**
+ * oxfmt configuration.
+ *
+ * https://oxc.rs/docs/guide/usage/formatter/config-file-reference
+ */
+{
+	"sortImports": {
+		"sortSideEffects": false
+	},
+	"trailingComma": "none"
+}

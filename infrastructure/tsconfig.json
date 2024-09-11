@@ -1,0 +1,14 @@
+/*
+ * TypeScript configuration.
+ *
+ * https://www.typescriptlang.org/tsconfig
+ */
+{
+	"extends": ["@tsconfig/strictest/tsconfig.json"],
+	"compilerOptions": {
+		"outDir": "build/js",
+		"rootDir": "src",
+		"types": ["node"]
+	},
+	"include": ["src"]
+}

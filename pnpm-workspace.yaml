@@ -1,0 +1,9 @@
+#
+# pnpm configuration.
+#
+# https://pnpm.io/settings
+#
+
+packages:
+  - infrastructure
+updateNotifier: false

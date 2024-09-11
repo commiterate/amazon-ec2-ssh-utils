@@ -1,0 +1,17 @@
+#
+# Mockery configuration.
+#
+# https://vektra.github.io/mockery/latest/configuration
+#
+
+packages:
+  github.com/commiterate/amazon-ec2-ssh-utils/client/internal/interfaces:
+    # By default, we assume 1 interface per file + 1 interface file per directory.
+    #
+    # This lets us have a "_mock.go" in the same directory as interfaces like "_test.go" for implementations.
+    config:
+      all: true
+      dir: "{{.InterfaceDir}}"
+      filename: "interface_mock.go"
+      inpackage: true
+      recursive: true

@@ -1,0 +1,17 @@
+#
+# EditorConfig configuration.
+#
+# https://spec.editorconfig.org#supported-pairs
+#
+
+root = true
+
+[*]
+indent_style = tab
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = off
+
+[*.{md,nix,yaml,yml}]
+indent_style = space
+indent_size = 2
