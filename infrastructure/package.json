@@ -1,0 +1,16 @@
+{
+	"name": "@amazon-ec2-ssh-utils/infrastructure",
+	"private": true,
+	"type": "module",
+	"dependencies": {
+		"aws-cdk-lib": "^2.261.0",
+		"confbox": "^0.2.4"
+	},
+	"devDependencies": {
+		"@aws-sdk/client-ssm": "^3.1084.0",
+		"@tsconfig/strictest": "^2.0.8",
+		"@types/node": "^24.13.3",
+		"aws-cdk": "^2.1129.0",
+		"typescript": "^7.0.2"
+	}
+}

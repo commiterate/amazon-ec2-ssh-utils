@@ -1,0 +1,7 @@
+{
+	"arn:aws:ssm:us-west-2::parameter/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64": "ami-0f39276b2d3b617c4",
+	"arn:aws:ssm:us-west-2::parameter/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64": "ami-05f9478b4deb8d173",
+	"arn:aws:ssm:us-west-2::parameter/aws/service/ami-windows-latest/Windows_Server-2025-English-Core-Base": "ami-0070a8f9588170613",
+	"arn:aws:ssm:us-west-2::parameter/aws/service/ec2-macos/sequoia/arm64_mac/latest/image_id": "ami-04645bdf3a4e06305",
+	"arn:aws:ssm:us-west-2::parameter/aws/service/ec2-macos/sequoia/x86_64_mac/latest/image_id": "ami-05f564dc988378cc1"
+}
