@@ -1,0 +1,3 @@
+# Go.
+internal/interfaces/**/*_mock.go linguist-generated=true
+go.sum linguist-generated=true

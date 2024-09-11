@@ -1,0 +1,13 @@
+# direnv.
+.direnv
+
+# Sublime Text.
+.lsp
+*.sublime-*
+
+# JetBrains.
+.idea
+*.iml
+
+# Build.
+build
