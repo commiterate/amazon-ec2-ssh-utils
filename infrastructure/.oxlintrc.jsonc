@@ -1,0 +1,8 @@
+/**
+ * oxlint configuration.
+ *
+ * https://oxc.rs/docs/guide/usage/linter/config-file-reference
+ */
+{
+	"plugins": ["import", "typescript"],
+}

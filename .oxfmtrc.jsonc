@@ -1,0 +1,13 @@
+/**
+ * oxfmt configuration.
+ *
+ * https://oxc.rs/docs/guide/usage/formatter/config-file-reference
+ */
+{
+	"insertFinalNewline": true,
+	"printWidth": 120,
+	"sortImports": {
+		"sortSideEffects": false,
+	},
+	"useTabs": true,
+}
